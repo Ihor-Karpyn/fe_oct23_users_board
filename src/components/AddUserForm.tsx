@@ -7,7 +7,7 @@ import { Color } from '../types';
 
 interface Props {
   colors: Color[];
-  addUser: (name: string, carColorId: number) => void;
+  addUser: (name: string, carColorId: number) => Promise<void>;
 }
 
 export const AddUserForm: FC<Props> = React.memo(({ colors, addUser }) => {
@@ -15,10 +15,11 @@ export const AddUserForm: FC<Props> = React.memo(({ colors, addUser }) => {
   const [colorId, setColorId] = useState(0);
   const [isNameError, setIsNameError] = useState(false);
   const [isColorError, setIsColorError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const selectedColor = colors.find(c => c.id === colorId);
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     if (!name || !colorId) {
       setIsNameError(!name);
       setIsColorError(!colorId);
@@ -26,10 +27,18 @@ export const AddUserForm: FC<Props> = React.memo(({ colors, addUser }) => {
       return;
     }
 
-    addUser(name, colorId);
+    setIsLoading(true);
 
-    setName('');
-    setColorId(0);
+    try {
+      await addUser(name, colorId);
+
+      setName('');
+      setColorId(0);
+    } catch (e) {
+      window.alert(e.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -55,6 +64,7 @@ export const AddUserForm: FC<Props> = React.memo(({ colors, addUser }) => {
             setIsNameError(false);
           }}
           error={isNameError}
+          disabled={isLoading}
         />
 
         <Select
@@ -67,6 +77,7 @@ export const AddUserForm: FC<Props> = React.memo(({ colors, addUser }) => {
             setColorId(+e.target.value);
           }}
           error={isColorError}
+          disabled={isLoading}
         >
           <MenuItem value={0} disabled>
             Color
@@ -86,6 +97,7 @@ export const AddUserForm: FC<Props> = React.memo(({ colors, addUser }) => {
         type="submit"
         variant="outlined"
         style={{ width: '100%' }}
+        loading={isLoading}
       >
         Add new player
       </LoadingButton>
