@@ -35,7 +35,7 @@ export const AddUserForm: FC<Props> = React.memo(({ colors, addUser }) => {
       setName('');
       setColorId(0);
     } catch (e) {
-      window.alert(e.message);
+      window.alert(e);
     } finally {
       setIsLoading(false);
     }

@@ -5,7 +5,7 @@ import './App.scss';
 import { UserList } from './components/UserList';
 import { AddUserForm } from './components/AddUserForm';
 import { AppContainer } from './components/AppContainer';
-import { Color, User, UserWithColor } from './types';
+import { Color, User } from './types';
 import { prepareUsers } from './helpers';
 import { usersApi } from './api/users.api';
 import { colorsApi } from './api/colors.api';

@@ -5,4 +5,4 @@ const get = () => client.get<Color[]>('/colors');
 
 export const colorsApi = {
   get,
-}
+};
